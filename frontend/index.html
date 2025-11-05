@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Advisor Chatbot</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="chat-container">
+            <div class="chat-header">
+                <h1>Financial Advisor Chatbot</h1>
+                <p>Ask me about taxation, mutual funds, insurance and government schemes</p>
+                <button id="clearBtn" class="clear-btn">Clear Chat</button>
+            </div>
+
+            <div id="chatMessages" class="chat-messages">
+                <div class="message bot-message">
+                    <div class="message-content">
+                        <strong>Financial Advisor:</strong> Hello! I'm your financial assistant. I can help you with questions about:
+                        <ul>
+                            <li>📊 Taxation (Income Tax, GST, Deductions)</li>
+                            <li>💹 Mutual Funds (SIP, Types, NAV)</li>
+                            <li>🛡️ Insurance (Life, Health, Term Plans)</li>
+                            <li>🏛️ Government Schemes (PPF, EPF, SSY)</li>
+                        </ul>
+                        What would you like to know?
+                    </div>
+                </div>
+            </div>
+
+            <div class="quick-questions">
+                <p>Quick questions:</p>
+                <button class="quick-btn" data-question="What is Section 80C?">What is Section 80C?</button>
+                <button class="quick-btn" data-question="How does SIP work?">How does SIP work?</button>
+                <button class="quick-btn" data-question="What is term insurance?">What is term insurance?</button>
+                <button class="quick-btn" data-question="Tell me about PPF">Tell me about PPF</button>
+            </div>
+
+            <div class="chat-input-container">
+                <input 
+                    type="text" 
+                    id="userInput" 
+                    placeholder="Type your financial question here..."
+                    autocomplete="off"
+                >
+                <button id="sendBtn">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
