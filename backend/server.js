@@ -71,7 +71,6 @@ async function queryGemini(userMessage, history = []) {
       contents: fullPrompt,
       config: {
         temperature: 0.7,
-        maxOutputTokens: 800,
       }
     });
 
