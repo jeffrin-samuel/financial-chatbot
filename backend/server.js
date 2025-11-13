@@ -67,7 +67,7 @@ async function queryGemini(userMessage, history = []) {
 
   try {
     const response = await ai.models.generateContent({
-      model: "gemini-2.0-flash-exp",
+      model: "gemini-1.5-flash",
       contents: fullPrompt,
       config: {
         temperature: 0.7,
