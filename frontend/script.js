@@ -30,6 +30,9 @@ function addMessage(content, isUser = false) {
 
 // Format bot messages (convert markdown-like syntax)
 function formatMessage(text) {
+    // Convert markdown headings ###, ##, # into bold titles
+    text = text.replace(/^#{1,6}\s*(.*)$/gm, '<strong>$1</strong><br>');
+
     // Convert **bold** to <strong>
     text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
     

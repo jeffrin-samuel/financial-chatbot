@@ -1,13 +1,13 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import { GoogleGenAI } from "@google/genai";
+import OpenAI from "openai";
 import path from "path";
 import { fileURLToPath } from "url";
 
 dotenv.config();
 
-// Get current file and directory paths (needed for ES modules)
+// Paths (ESM fix)
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -18,15 +18,15 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 
-// IMPORTANT: Serve static files (HTML, CSS, JS) from frontend folder
-app.use(express.static(path.join(__dirname, '../frontend')));
+// Serve frontend
+app.use(express.static(path.join(__dirname, "../frontend")));
 
-// Initialize Google Gemini AI
-const ai = new GoogleGenAI({
-  apiKey: process.env.GEMINI_API_KEY
+// Initialize OpenAI Client
+const client = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
 });
 
-// Financial knowledge base for system prompt
+// Financial system prompt
 const FINANCIAL_SYSTEM_PROMPT = `You are a helpful financial advisor chatbot specializing in Indian finance. You provide clear, simple explanations about:
 
 1. TAXATION: Income tax, GST, tax-saving investments, deductions under 80C, 80D, etc.
@@ -43,41 +43,35 @@ Guidelines:
 
 Always be helpful, accurate, and responsible with financial information.`;
 
-// Store conversation history
+// store conversations
 const conversations = new Map();
 
-// Query Google Gemini API using the SDK
-async function queryGemini(userMessage, history = []) {
-  if (!process.env.GEMINI_API_KEY) {
-    throw new Error("GEMINI_API_KEY is not set in .env file");
+// Query OpenAI
+async function queryOpenAI(userMessage, history = []) {
+  if (!process.env.OPENAI_API_KEY) {
+    throw new Error("OPENAI_API_KEY missing in .env");
   }
 
-  // Build conversation context
-  let fullPrompt = FINANCIAL_SYSTEM_PROMPT + "\n\n";
-  
-  if (history.length > 0) {
-    fullPrompt += "Previous conversation:\n";
-    history.forEach((msg) => {
-      fullPrompt += `${msg.role === "user" ? "User" : "Assistant"}: ${msg.content}\n`;
-    });
-    fullPrompt += "\n";
-  }
-  
-  fullPrompt += `User: ${userMessage}\n\nAssistant:`;
+  const messages = [
+    { role: "system", content: FINANCIAL_SYSTEM_PROMPT },
+    ...history.map((msg) => ({
+      role: msg.role,
+      content: msg.content,
+    })),
+    { role: "user", content: userMessage },
+  ];
 
   try {
-    const response = await ai.models.generateContent({
-      model: "models/gemini-1.5-flash-002",
-      contents: fullPrompt,
-      config: {
-        temperature: 0.7,
-      }
+    const response = await client.chat.completions.create({
+      model: "gpt-4o-mini",
+      messages,
+      temperature: 0.7,
     });
 
-    return response.text;
-  } catch (error) {
-    console.error("Gemini API Error:", error);
-    throw error;
+    return response.choices[0].message.content;
+  } catch (err) {
+    console.error("OpenAI Error:", err);
+    throw err;
   }
 }
 
@@ -90,24 +84,23 @@ app.post("/api/chat", async (req, res) => {
       return res.status(400).json({ error: "Message is required" });
     }
 
-    if (!process.env.GEMINI_API_KEY) {
-      return res.status(500).json({ 
-        error: "API key not configured. Please add GEMINI_API_KEY to your .env file",
-        instructions: "Get your free key at: https://aistudio.google.com/app/apikey"
+    if (!process.env.OPENAI_API_KEY) {
+      return res.status(500).json({
+        error: "OPENAI_API_KEY missing in .env",
+        instructions: "Create API key at https://platform.openai.com/api-keys",
       });
     }
 
     let history = conversations.get(conversationId) || [];
-    console.log("Sending request to Gemini...");
 
     const recentHistory = history.slice(-6);
-    const assistantMessage = await queryGemini(message, recentHistory);
+    const assistantMessage = await queryOpenAI(message, recentHistory);
 
-    console.log("Received response from Gemini");
-
+    // Add messages to history
     history.push({ role: "user", content: message });
     history.push({ role: "assistant", content: assistantMessage });
 
+    // Limit history
     if (history.length > 10) {
       history = history.slice(-10);
     }
@@ -116,49 +109,36 @@ app.post("/api/chat", async (req, res) => {
 
     res.json({
       response: assistantMessage,
-      conversationId: conversationId,
+      conversationId,
     });
   } catch (error) {
     console.error("Error:", error);
-    
-    if (error.message?.includes("API_KEY_INVALID") || error.message?.includes("invalid")) {
-      return res.status(401).json({
-        error: "Invalid API key. Please check your GEMINI_API_KEY in .env file",
-        instructions: "Get your free key at: https://aistudio.google.com/app/apikey"
-      });
-    }
-    
-    if (error.message?.includes("429") || error.message?.includes("RESOURCE_EXHAUSTED")) {
-      return res.status(429).json({
-        error: "Rate limit reached. Please wait a moment and try again.",
-        details: "Free tier has usage limits."
-      });
-    }
-    
+
     res.status(500).json({
-      error: "Failed to process message. Please try again.",
+      error: "Failed to process request.",
       details: error.message,
     });
   }
 });
 
-// Clear conversation endpoint
+// Clear conversation
 app.post("/api/clear", (req, res) => {
   const { conversationId = "default" } = req.body;
   conversations.delete(conversationId);
   res.json({ message: "Conversation cleared" });
 });
 
-// Serve index.html for all other routes (IMPORTANT for serving your frontend)
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../frontend', 'index.html'));
+// Serve frontend SPA
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../frontend", "index.html"));
 });
 
 app.listen(PORT, () => {
-  console.log(`🚀 Financial Chatbot running on http://localhost:${PORT}`);
-  if (!process.env.GEMINI_API_KEY) {
-    console.log(`⚠️  WARNING: GEMINI_API_KEY not found in .env file`);
+  console.log(`🚀 Chatbot running at http://localhost:${PORT}`);
+
+  if (!process.env.OPENAI_API_KEY) {
+    console.log("⚠️  OPENAI_API_KEY missing in .env");
   } else {
-    console.log(`✅ API key configured successfully`);
+    console.log("✅ OpenAI API key loaded");
   }
 });
