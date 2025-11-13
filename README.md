@@ -2,7 +2,7 @@
 
 A **Natural Language Processing (NLP)** powered chatbot that helps users understand **Indian financial topics** such as **taxation**, **mutual funds**, **insurance**, and **government schemes** — explained in simple, easy-to-understand language.
 
-This project was created as part of a **college mini project** to demonstrate the integration of **AI (Google Gemini)** with a **Node.js backend** and a simple **HTML/CSS/JS frontend**.
+This project was created as part of a **college mini project** to demonstrate the integration of **AI (OpenAI)** with a **Node.js backend** and a simple **HTML/CSS/JS frontend**.
 
 ---
 
@@ -25,7 +25,7 @@ To develop a chatbot that:
 
 ## ⚙️ Features
 
-✅ **NLP-Powered:** Uses **Google Gemini AI API** for natural language understanding and generation  
+✅ **NLP-Powered:** Uses **OPENAI API** for natural language understanding and generation  
 ✅ **Financial Knowledge Base:** Covers tax, insurance, mutual funds, and govt schemes  
 ✅ **User-Friendly Chat UI:** Simple, modern interface built using HTML, CSS, and JavaScript  
 ✅ **Clear Chat Option:** Clears chat both in UI and server memory  
@@ -40,7 +40,7 @@ To develop a chatbot that:
 |--------|------------------|--------------|
 | **Frontend** | HTML, CSS, Vanilla JavaScript | For chat interface and message handling |
 | **Backend** | Node.js, Express.js | Handles API requests and connects to Gemini |
-| **AI / NLP Engine** | Google Gemini API (via `@google/genai` SDK) | Provides natural-language answers |
+| **AI / NLP Engine** | OpenAI API (via `openai` SDK) | Provides natural-language answers |
 | **Environment Variables** | `dotenv` | For securely managing API key |
 | **Hosting** | Render | Free cloud deployment of Node.js app |
 
