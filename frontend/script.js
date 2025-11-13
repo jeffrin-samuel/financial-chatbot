@@ -34,7 +34,7 @@ function formatMessage(text) {
     text = text.replace(/^#{1,6}\s*(.*)$/gm, '<strong>$1</strong>');
 
     // Convert **bold** to <strong>
-    text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+    text = text.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
     
     // Convert line breaks to <br>
     text = text.replace(/\n/g, '<br>');
