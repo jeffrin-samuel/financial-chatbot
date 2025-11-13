@@ -378,6 +378,7 @@ body {
 @media (max-width: 900px) {
   body {
     padding: 0;
+    align-items: stretch;
   }
 
   .wrap {
@@ -394,10 +395,25 @@ body {
   .chat-card {
     height: 100%;
     border-radius: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .chat-header {
+    padding: 12px 15px;
+    flex-shrink: 0;
+  }
+
+  .logo-mini {
+    width: 36px;
+    height: 36px;
   }
 
   .messages {
+    flex: 1;
     padding: 15px;
+    overflow-y: auto;
+    min-height: 0;
   }
 
   .message-content {
@@ -405,7 +421,9 @@ body {
   }
 
   .composer {
-    padding: 12px;
+    padding: 12px 15px;
+    flex-shrink: 0;
+    padding-bottom: max(12px, env(safe-area-inset-bottom));
   }
 
   .input-shell {
@@ -423,16 +441,35 @@ body {
 }
 
 @media (max-width: 480px) {
-  .message-content {
-    max-width: 90%;
-    font-size: 13px;
+  .chat-header {
+    padding: 10px 12px;
+  }
+
+  .logo-mini {
+    width: 32px;
+    height: 32px;
   }
 
   .chat-title {
     font-size: 14px;
   }
 
+  .message-content {
+    max-width: 90%;
+    font-size: 13px;
+  }
+
   .composer {
-    padding: 10px;
+    padding: 10px 12px;
+    padding-bottom: max(10px, env(safe-area-inset-bottom));
+  }
+
+  .input-shell input {
+    font-size: 13px;
+    padding: 9px 12px;
+  }
+
+  .send {
+    padding: 9px 11px;
   }
 }
