@@ -335,6 +335,7 @@ body {
   flex: 1;
   display: flex;
   align-items: center;
+  margin-bottom: 2rem;
   gap: 12px;
 }
 
@@ -414,6 +415,7 @@ body {
   }
 
   .chat-header {
+    margin-top: 2rem;
     padding: 16px;
     flex-shrink: 0;
     background: rgba(0, 0, 0, 0.4);
