@@ -1,55 +1,89 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Financial Advisor Chatbot</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Financial Advisor Chatbot - Dark Fusion</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <div class="chat-container">
-            <div class="chat-header">
-                <h1>Financial Advisor Chatbot</h1>
-                <p>Ask me about taxation, mutual funds, insurance and government schemes</p>
-                <button id="clearBtn" class="clear-btn">Clear Chat</button>
-            </div>
+  <!-- animated particle canvas -->
+  <canvas id="bg-canvas" aria-hidden="true"></canvas>
 
-            <div id="chatMessages" class="chat-messages">
-                <div class="message bot-message">
-                    <div class="message-content">
-                        <strong>Financial Advisor:</strong> Hello! I'm your financial assistant. I can help you with questions about:
-                        <ul>
-                            <li>📊 Taxation (Income Tax, GST, Deductions)</li>
-                            <li>💹 Mutual Funds (SIP, Types, NAV)</li>
-                            <li>🛡️ Insurance (Life, Health, Term Plans)</li>
-                            <li>🏛️ Government Schemes (PPF, EPF, SSY)</li>
-                        </ul>
-                        What would you like to know?
-                    </div>
-                </div>
-            </div>
-
-            <div class="quick-questions">
-                <p>Quick questions:</p>
-                <button class="quick-btn" data-question="What is Section 80C?">What is Section 80C?</button>
-                <button class="quick-btn" data-question="How does SIP work?">How does SIP work?</button>
-                <button class="quick-btn" data-question="What is term insurance?">What is term insurance?</button>
-                <button class="quick-btn" data-question="Tell me about PPF">Tell me about PPF</button>
-            </div>
-
-            <div class="chat-input-container">
-                <input 
-                    type="text" 
-                    id="userInput" 
-                    placeholder="Type your financial question here..."
-                    autocomplete="off"
-                >
-                <button id="sendBtn">Send</button>
-            </div>
+  <div class="wrap">
+    <aside class="left-panel">
+      <div class="brand">
+        <div class="logo" id="logo">
+          <div class="eye left"></div>
+          <div class="eye right"></div>
         </div>
-    </div>
+        <div class="brand-text">
+          <div class="brand-title">FinBot</div>
+          <div class="brand-sub">Financial Advisor • AI</div>
+        </div>
+      </div>
 
-    <script src="script.js"></script>
+      <div class="quick">
+        <button class="chip quick-btn" data-question="What is Section 80C?">What is Section 80C?</button>
+        <button class="chip quick-btn" data-question="How does SIP work?">How does SIP work?</button>
+        <button class="chip quick-btn" data-question="What is term insurance?">What is term insurance?</button>
+        <button class="chip quick-btn" data-question="Tell me about PPF">Tell me about PPF</button>
+      </div>
+
+      <div class="footer-note">FPTI Project • Powered by AI</div>
+    </aside>
+
+    <main class="chat-card" role="main">
+      <header class="chat-header">
+        <div class="chat-header-left">
+          <div class="logo-mini">
+            <div class="eye left"></div>
+            <div class="eye right"></div>
+          </div>
+          <div class="chat-title">Financial Advisor</div>
+        </div>
+        <div class="header-actions">
+          <button class="icon-btn" id="clearBtn" title="Clear chat">⟲</button>
+        </div>
+      </header>
+
+      <section class="messages" id="chatMessages" aria-live="polite" role="log">
+        <div class="message bot-message">
+          <div class="message-content">
+            <strong>Financial Advisor:</strong> Hello! I'm your financial assistant. I can help you with questions about:
+            <ul>
+              <li>📊 Taxation (Income Tax, GST, Deductions)</li>
+              <li>💹 Mutual Funds (SIP, Types, NAV)</li>
+              <li>🛡️ Insurance (Life, Health, Term Plans)</li>
+              <li>🏛️ Government Schemes (PPF, EPF, SSY)</li>
+            </ul>
+            What would you like to know?
+          </div>
+        </div>
+      </section>
+
+      <form class="composer" id="composer" onsubmit="return false;">
+        <div class="input-shell">
+          <input 
+            type="text" 
+            id="userInput" 
+            placeholder="Ask about taxation, mutual funds, insurance..." 
+            aria-label="Message input"
+            autocomplete="off"
+          />
+          <div class="send-controls">
+            <button class="send" id="sendBtn" type="button" aria-label="Send message">
+              <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+                <path d="M2 21l21-9L2 3v7l15 2-15 2v7z" fill="currentColor"></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </form>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
 </body>
 </html>
